@@ -1,0 +1,70 @@
+﻿@model AddOrderModel
+@{
+	ViewData["Order"] = "Order";
+}
+<h1>@ViewData["Order"]</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">OrderProductQuantity</th>
+			<th scope="col">ProductCode</th>
+			<th scope="col">ProductName</th>
+			<th scope="col">Description</th>
+			<th scope="col">Price</th>
+			<th scope="col">ProductQuantity</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in @Model.ProductList)
+		{
+			<tr>
+				<th scope="row">@item.AddProduct.Id</th>
+				<td>@item.AddOrderProductQuantity</td>	
+				<td>@item.AddProduct.ProductCode</td>
+				<td>@item.AddProduct.ProductName</td>
+				<td>@item.AddProduct.Description</td>
+				<td>@item.AddProduct.Price</td>
+				<td>@item.AddProduct.ProductQuantity</td>				
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div>
+	<form asp-controller="Order" asp-action="AddProductToOrder">
+		@if (Model?.ProductList != null)
+		{
+			for (int i = 0; i < Model?.ProductList.Count; i++)
+			{
+				@Html.HiddenFor(item => Model.ProductList[i].AddOrderProductQuantity)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Description)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Id)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Price)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductCode)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductQuantity)
+				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductName)
+			}
+		}
+		<div class="form-group">
+			@Html.LabelFor(model => model.ProductId, new { @class = "sr-only", @for = "ProductCode" })
+			@Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.ProductList, "Value", "Text"), "Seçiniz", new { @class = "form-select", @placeholder = "Product:" , @id="ProductId" })
+			@Html.ValidationMessageFor(model => model.ProductId)
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.ProductQuantity, new { @class = "sr-only", @for = "ProductQuantity" })
+			@Html.TextBoxFor(model => model.ProductQuantity, new { @class = "form-control", @placeholder = "ProductQuantity" , @id="ProductQuantity" })
+			@Html.ValidationMessageFor(model => model.ProductQuantity)
+		</div>
+
+		<br />
+		<div>
+			<button type="submit" class="btn btn-primary">Add Product</button>
+			<input type="submit" name="AddOrder" value="AddOrder" class="btn btn-success" formaction="@Url.Action("AddOrder", new {})" formmethod="post" />
+		</div>
+
+	</form>
+</div>
+<br />
