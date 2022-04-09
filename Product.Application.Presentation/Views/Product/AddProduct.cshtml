@@ -1,8 +1,10 @@
 ﻿@model AddProductModel
 @{
 	ViewData["AddProduct"] = "Add Product";
+	ViewData["AddProductList"] = "Add Product List";
 }
 <h1>@ViewData["AddProduct"]</h1>
+<br/>
 
 <div>
 	<form asp-controller="Product" asp-action="AddProduct">
@@ -10,7 +12,7 @@
 			@Html.LabelFor(model => model.ProductCode, new { @class = "sr-only", @for = "ProductCode" })
 			@Html.TextBoxFor(model => model.ProductCode, new { @class = "form-control", @placeholder = "ProductCode:" , @id="ProductCode" })
 			@Html.ValidationMessageFor(model => model.ProductCode)
-		</div>*@
+			</div>*@
 
 		<div class="form-group">
 			@Html.LabelFor(model => model.ProductName, new { @class = "sr-only", @for = "ProductName" })
@@ -42,5 +44,24 @@
 		</div>
 
 	</form>
+</div>
+<br />
+
+<h1>@ViewData["AddProductList"]</h1>
+<br />
+<div><p>Toplu yükleme yapabilmek için Excel dosyasını <a href="http://localhost:5187/productApplication.xlsx">indir</a>iniz.</p></div>
+<br />
+
+<div class="d-inline-flex">
+	@using (Html.BeginForm("AddProductList", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+	{
+		<div class="fileinput fileinput-new text-center">
+			<span class="btn btn-raised btn-default btn-file">
+				<span class="fileinput-new">Excel Dosyası Seç</span>
+				<input type="file" id="excelfile" name="excelfile" />
+			</span>
+			<input type="submit" id="Submit" value="Yükle" class="btn btn-primary" />
+		</div>
+	}
 </div>
 <br />

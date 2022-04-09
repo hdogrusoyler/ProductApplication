@@ -5,7 +5,7 @@
 <h1>@ViewData["Login"]</h1>
 
 <div>
-	<form asp-controller="Account" asp-action="Login" method="post">
+	<form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
 		<div class="form-group">
 			@Html.LabelFor(model => model.UserName, new { @class = "sr-only", @for = "Email" })
 			@Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @placeholder = "UserName:" , @id="UserName" })

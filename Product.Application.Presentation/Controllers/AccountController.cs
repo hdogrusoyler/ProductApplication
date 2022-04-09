@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.BusinessLogic.Abstract;
 using Product.Application.Entity;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace Product.Application.Presentation.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private IUserService userService;
@@ -18,8 +20,9 @@ namespace Product.Application.Presentation.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -34,9 +37,15 @@ namespace Product.Application.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             User user = new User();
+
+            if (String.IsNullOrEmpty(returnUrl))
+            {
+                ModelState["returnUrl"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            }
 
             if (ModelState.IsValid)
             {
@@ -59,7 +68,14 @@ namespace Product.Application.Presentation.Controllers
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(principal), authProperties);
 
-                    return RedirectToAction("Index", "Product");
+					if (String.IsNullOrEmpty(returnUrl))
+					{
+                        return RedirectToAction("Index", "Order");
+					}
+					else
+					{
+                        return Redirect(returnUrl);
+                    }                    
                 }
             }
             return RedirectToAction("Login");

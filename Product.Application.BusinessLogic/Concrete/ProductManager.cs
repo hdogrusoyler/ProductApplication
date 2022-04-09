@@ -33,6 +33,15 @@ namespace Product.Application.BusinessLogic.Concrete
             res = unitOfWork.productDal.GetList(null, (qry) => qry.OrderByDescending(x => x.Id), page, pageSize, i => i.Include(c => c.OrderProducts).ThenInclude(o => o.Order));
             return res;
         }
+        public string AddProductList(List<Entity.Product> entityList)
+        {
+            unitOfWork.BeginTransaction();
+            foreach (var item in entityList)
+			{                
+                unitOfWork.productDal.Add(item);                
+            }
+            return unitOfWork.CommitSaveChanges();
+        }
 
         public string Add(Entity.Product entity)
         {
