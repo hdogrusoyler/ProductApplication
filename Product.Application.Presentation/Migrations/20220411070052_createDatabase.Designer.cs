@@ -12,7 +12,7 @@ using Product.Application.DataAccess.EntityFramework;
 namespace Product.Application.Presentation.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220408113018_createDatabase")]
+    [Migration("20220411070052_createDatabase")]
     partial class createDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,24 +49,16 @@ namespace Product.Application.Presentation.Migrations
 
             modelBuilder.Entity("Product.Application.Entity.OrderProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderProductQuantity")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("OrderProductQuantity")
+                        .HasColumnType("int");
 
-                    b.HasIndex("OrderId");
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
 

@@ -45,8 +45,7 @@ namespace Product.Application.Entity.EfMap
         public void Configure(EntityTypeBuilder<OrderProduct> builder)
         {
             //builder.HasNoKey();
-            builder.Property(e => e.OrderId)
-                   .IsRequired();
+            builder.HasKey(fm => new { fm.OrderId, fm.ProductId });
 
             builder.HasOne(c => c.Product)
                 .WithMany(u => u.OrderProducts)

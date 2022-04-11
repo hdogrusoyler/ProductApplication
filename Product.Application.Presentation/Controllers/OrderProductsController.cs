@@ -45,9 +45,9 @@ namespace Product.Application.Presentation.Controllers
         }
 
         [HttpPost("{id}")]
-        public string Delete(int Id)
+        public string Delete(int productId, int orderId)
         {
-            return orderProductService.Delete(new OrderProduct { Id = Id });
+            return orderProductService.Delete(new OrderProduct { ProductId = productId, OrderId = orderId });
         }
     }
 }
