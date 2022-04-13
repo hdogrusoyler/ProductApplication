@@ -47,8 +47,10 @@ namespace Product.Application.Presentation.Controllers
                     ProductQuantity = product.ProductQuantity,
                 };
                 productService.Add(productModel);
+
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(product);
         }
 
         public IActionResult AddProductList(IFormFile excelfile)

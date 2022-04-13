@@ -68,14 +68,28 @@ namespace Product.Application.Presentation.Controllers
                 }
 
                 TempData["ProductList"] = JsonConvert.SerializeObject(model);
+
+                return RedirectToAction("AddOrder");
             }
-            return RedirectToAction("AddOrder");
+
+            #region ProductList
+            var productList = productService.GetAll();
+            var productListItem = new List<SelectListItem>();
+            foreach (var product in productList)
+            {
+                productListItem.Add(new SelectListItem() { Text = product.ProductCode + " " + product.ProductName, Value = product.Id.ToString() });
+            }
+            ViewBag.ProductList = productListItem;
+            #endregion
+
+            return View("AddOrder", model);
         }
 
         [HttpPost]
         public IActionResult AddOrder(AddOrderModel model)
         {
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
+            if (model.ProductList.Count > 0)
             {
                 var order = new Order()
                 {
@@ -88,8 +102,25 @@ namespace Product.Application.Presentation.Controllers
                     order.OrderProducts.Add(new OrderProduct() { ProductId = item.AddProduct.Id, OrderProductQuantity = item.AddOrderProductQuantity });
                 }
                 orderService.AddOrder(order);
+
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+
+            #region AddModelError
+            ModelState.AddModelError("ProductList", "Please Add Prduct!");
+			#endregion
+
+			#region ProductList
+			var productList = productService.GetAll();
+            var productListItem = new List<SelectListItem>();
+            foreach (var product in productList)
+            {
+                productListItem.Add(new SelectListItem() { Text = product.ProductCode + " " + product.ProductName, Value = product.Id.ToString() });
+            }
+            ViewBag.ProductList = productListItem;
+            #endregion
+
+            return View(model);
         }
 
         //[AllowAnonymous]

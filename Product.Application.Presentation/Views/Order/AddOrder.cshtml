@@ -21,32 +21,37 @@
 		{
 			<tr>
 				<th scope="row">@item.AddProduct.Id</th>
-				<td>@item.AddOrderProductQuantity</td>	
+				<td>@item.AddOrderProductQuantity</td>
 				<td>@item.AddProduct.ProductCode</td>
 				<td>@item.AddProduct.ProductName</td>
 				<td>@item.AddProduct.Description</td>
 				<td>@item.AddProduct.Price</td>
-				<td>@item.AddProduct.ProductQuantity</td>				
+				<td>@item.AddProduct.ProductQuantity</td>
 			</tr>
 		}
 	</tbody>
 </table>
 
 <div>
+	@Html.ValidationMessage("ProductList")
+</div>
+
+<br />
+
+<div>
 	<form asp-controller="Order" asp-action="AddProductToOrder">
-		@if (Model?.ProductList != null)
+
+		@for (int i = 0; i < Model?.ProductList.Count; i++)
 		{
-			for (int i = 0; i < Model?.ProductList.Count; i++)
-			{
-				@Html.HiddenFor(item => Model.ProductList[i].AddOrderProductQuantity)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Description)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Id)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Price)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductCode)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductQuantity)
-				@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductName)
-			}
+			@Html.HiddenFor(item => Model.ProductList[i].AddOrderProductQuantity)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Description)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Id)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.Price)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductCode)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductQuantity)
+			@Html.HiddenFor(item => Model.ProductList[i].AddProduct.ProductName)
 		}
+
 		<div class="form-group">
 			@Html.LabelFor(model => model.ProductId, new { @class = "sr-only", @for = "ProductCode" })
 			@Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.ProductList, "Value", "Text"), "Seçiniz", new { @class = "form-select", @placeholder = "Product:" , @id="ProductId" })
