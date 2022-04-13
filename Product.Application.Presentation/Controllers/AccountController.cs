@@ -32,8 +32,9 @@ namespace Product.Application.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 userService.Add(new User() { UserName = model.UserName, Password = model.Password });
+                return RedirectToAction("Login");
             }
-            return RedirectToAction("Login");
+            return View("Login", model);
         }
 
         [HttpPost]
@@ -75,10 +76,11 @@ namespace Product.Application.Presentation.Controllers
 					else
 					{
                         return Redirect(returnUrl);
-                    }                    
+                    }
                 }
+                return RedirectToAction("Login");
             }
-            return RedirectToAction("Login");
+            return View(model);
         }
 
         [HttpGet]
